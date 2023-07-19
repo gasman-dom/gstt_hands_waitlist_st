@@ -17,12 +17,17 @@ from HandPatient import Patient
 from HandPathway import Hand_Surgery_Pathway
 from ResultsCalculator import Trial_Results_Calculator
 from global_params import g
+from PIL import Image
 
 # page config
 st.set_page_config(layout='wide')
 
 # title text
 st.title('GSTT Hand Surgery Pathway Simulation')
+
+# image of pathway
+image = Image.open('/home/dom/docs/hsma/gstt_hands_waitlist_st/content/pathway_diagram.jpg')
+st.image(image,use_column_width=True)
 
 # set up columns
 col1, col2, col3, col4, col5 = st.columns(5)

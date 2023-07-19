@@ -92,5 +92,6 @@ class Trial_Results_Calculator:
         fig = px.bar(self.overall_q_numbers_df, barmode='group',
                      title='Numbers in waiting lists at start and end of simulation',
                      labels={'value': 'Patients waiting',
-                             'name': 'Stage of pathway'})
+                             'name': 'Stage of pathway',
+                             'variable': 'Before or after simulation'})
         return fig
