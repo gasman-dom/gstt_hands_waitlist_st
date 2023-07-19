@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import streamlit as st
+import plotly.express as px
 
 from HandPatient import Patient
 from HandPathway import Hand_Surgery_Pathway
@@ -138,6 +139,6 @@ if st.button('Start Simulation'):
         # plot the results
         col1, col2 = st.columns(2)
         with col1:
-            st.pyplot(demo_trial_results_calculator.plot_wait_times())
+            st.plotly_chart(demo_trial_results_calculator.plot_wait_times())
         with col2:
-            st.pyplot(demo_trial_results_calculator.plot_queue_numbers())
+            st.plotly_chart(demo_trial_results_calculator.plot_queue_numbers())

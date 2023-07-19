@@ -9,6 +9,7 @@ from statistics import mean
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import plotly.express as px
 
 from global_params import g
 from HandPathway import Hand_Surgery_Pathway
@@ -53,10 +54,13 @@ class Trial_Results_Calculator:
     # A method to read in the run results csv file and print them for the user
     def plot_wait_times(self):
         trial_results_df = pd.read_csv('all_wait_times.csv')
-
-        fig = plt.figure()
-        sns.regplot(data=trial_results_df, x='time_entered_pathway',
-                    y='overall_q_time', scatter_kws={'alpha':0.1})
+        
+        fig = px.scatter(trial_results_df, x='time_entered_pathway',
+                            y='overall_q_time', opacity=0.8, trendline='ols',
+                            trendline_color_override='red',
+                            title='Total wait time vs time of referral',
+                            labels={'time_entered_pathway': 'Time of referral',
+                                    'overall_q_time': 'Total wait time'})
         return fig
 
     # method to calculate average queue numbers over all runs
@@ -85,7 +89,8 @@ class Trial_Results_Calculator:
 
     # plot the average queue numbers
     def plot_queue_numbers(self):
-        fig = plt.figure()
-        # sns.barplot(data=self.overall_q_numbers_df)
-        self.overall_q_numbers_df.plot(kind='bar')
+        fig = px.bar(self.overall_q_numbers_df, barmode='group',
+                     title='Numbers in waiting lists at start and end of simulation',
+                     labels={'value': 'Patients waiting',
+                             'name': 'Stage of pathway'})
         return fig
