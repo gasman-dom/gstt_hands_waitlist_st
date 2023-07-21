@@ -25,6 +25,9 @@ st.set_page_config(layout='wide')
 # title text
 st.title('GSTT Hand Surgery Pathway Simulation')
 
+# description text
+st.subheader('An interactive webapp using Simpy and Streamlit.')
+
 # image of pathway
 image = Image.open('/home/dom/docs/hsma/gstt_hands_waitlist_st/content/pathway_diagram.jpg')
 st.image(image,use_column_width=True)
@@ -47,7 +50,7 @@ with col2:
                                         step = 1,
                                         value = g.surg_clinic_appts)
     
-    CLINIC_Q = st.number_input('Number in Clinic Queue',
+    CLINIC_Q = st.number_input('Patients Waiting for Clinic Appointment at Start of Simulation',
                                     step = 1,
                                     value = g.fill_clinic_q)
     
@@ -56,11 +59,11 @@ with col3:
                                    step = 1,
                                    value = g.imaging_wait)
     
-    PROB_IMAGING = st.slider('Probability Patients Need Imaging',
+    PROB_IMAGING = st.slider('Percentage of Patients that Require Imaging',
                                             step = 0.01,
                                             value = g.prob_needs_imaging)
     
-    IMAGING_Q = st.number_input('Number in Imaging Queue',
+    IMAGING_Q = st.number_input('Patients Waiting for Imaging at Start of Simulation',
                                         step = 1,
                                         value = g.fill_imaging_q)
     
@@ -69,11 +72,11 @@ with col4:
                                    step = 1,
                                    value = g.therapy_wait)
     
-    PROB_THERAPY = st.slider('Probability Patients Need Hand Therapy',
+    PROB_THERAPY = st.slider('Percentage of Patients that Require Therapy',
                                             step = 0.01,
                                             value = g.prob_needs_therapy)
     
-    THERAPY_Q = st.number_input('Number in Therapy Queue at Start of Simulation',
+    THERAPY_Q = st.number_input('Patients Waiting for Hand Therapy at Start of Simulation',
                                         step = 1,
                                         value = g.fill_therapy_q)
 
@@ -86,17 +89,21 @@ with col5:
                                             step = 1,
                                             value = g.theatre_list_capacity)
     
-    THEATRE_Q = st.number_input('Number in Theatre Queue at Start of Simulation',
+    THEATRE_Q = st.number_input('Patients Waiting for Theatre at Start of Simulation',
                                         step = 1,
                                         value = g.fill_theatre_q)
 
 NUM_OF_RUNS = st.number_input('Number of Times to Run Simulation',
                                         step = 1,   
                                         value = g.number_of_runs)
+st.text('Repeating the simulation more times will provide more accurate results, but will take longer to run.')
 
-LENGTH_OF_SIM = st.number_input('Length of Simulation (days)',
+LENGTH_OF_SIM = st.number_input('Length of Time to Simulate (days)',
                                         step = 1,
                                         value = g.sim_duration)
+
+#calculate total in queues
+TOTAL_Q = CLINIC_Q + IMAGING_Q + THERAPY_Q + THEATRE_Q
 
 # button to run simulation
 if st.button('Start Simulation'):
