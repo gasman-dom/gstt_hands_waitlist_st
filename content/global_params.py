@@ -16,12 +16,6 @@ class g:
     theatre_list_per_week = 3
     theatre_list_capacity = 6
     
-    surg_clinic_duration = 1 / surg_clinic_appts
-    surg_clinic_interval = 7 / surg_clinic_per_week
-
-    theatre_case_duration = 1 / theatre_list_capacity
-    theatre_list_interval = 7 / theatre_list_per_week
-    
     #proportion of patients requiring interventions
     prob_needs_imaging = 0.2
     prob_needs_therapy = 0.2
@@ -34,8 +28,6 @@ class g:
     fill_imaging_q = 50
     fill_therapy_q = 40
     fill_theatre_q = 30
-
-    total_fill_queues = fill_clinic_q + fill_imaging_q + fill_therapy_q + fill_theatre_q
     
     #number of times to run simulation
     number_of_runs = 5

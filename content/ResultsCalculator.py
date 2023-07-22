@@ -59,7 +59,7 @@ class Trial_Results_Calculator:
                             y='overall_q_time', opacity=0.8, trendline='ols',
                             trendline_color_override='red',
                             title='Total wait time vs time of referral',
-                            labels={'time_entered_pathway': 'Time of referral',
+                            labels={'time_entered_pathway': 'Day of referral',
                                     'overall_q_time': 'Total wait time'})
         return fig
 
