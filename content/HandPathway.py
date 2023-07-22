@@ -19,6 +19,8 @@ class Hand_Surgery_Pathway:
                  imaging_wait = g.imaging_wait,
                  theatre_list_per_week = g.theatre_list_per_week,
                  theatre_list_capacity = g.theatre_list_capacity,
+                 trauma_list_per_week = g.trauma_list_per_week,
+                 trauma_extra_patients = g.trauma_extra_patients,
                  prob_needs_imaging = g.prob_needs_imaging,
                  prob_needs_therapy = g.prob_needs_therapy,
                  sim_duration = g.sim_duration,
@@ -45,6 +47,9 @@ class Hand_Surgery_Pathway:
 
         self.theatre_list_per_week = theatre_list_per_week
         self.theatre_list_capacity = theatre_list_capacity
+
+        self.trauma_list_per_week = trauma_list_per_week
+        self.trauma_extra_patients = trauma_extra_patients
 
         self.surg_clinic_duration = 1 / surg_clinic_appts
         self.surg_clinic_interval = 7 / surg_clinic_appts

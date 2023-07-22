@@ -89,6 +89,14 @@ with col5:
                                             step = 1,
                                             value = g.theatre_list_capacity)
     
+    TRAUMA_LISTS = st.number_input('Trauma Lists Per Week',
+                                   step = 1,
+                                      value = g.trauma_list_per_week)
+    
+    EXTRA_PATIENTS = st.number_input('Extra Patients Per Trauma List',
+                                        step = 1,
+                                        value = g.trauma_extra_patients)
+
     THEATRE_Q = st.number_input('Patients Waiting for Theatre at Start of Simulation',
                                         step = 1,
                                         value = g.fill_theatre_q)
@@ -133,6 +141,8 @@ if st.button('Start Simulation'):
                                                       fill_therapy_q=THERAPY_Q,
                                                       theatre_list_per_week=LISTS_PER_WEEK,
                                                       theatre_list_capacity=LIST_CAPACITY,
+                                                      trauma_list_per_week=TRAUMA_LISTS,
+                                                      trauma_extra_patients=EXTRA_PATIENTS,
                                                       fill_theatre_q=THEATRE_Q,
                                                       sim_duration=LENGTH_OF_SIM
                                                       )

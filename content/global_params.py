@@ -15,6 +15,9 @@ class g:
     #theatre lists and cases per list
     theatre_list_per_week = 3
     theatre_list_capacity = 6
+
+    trauma_list_per_week = 5
+    trauma_extra_patients = 1
     
     #proportion of patients requiring interventions
     prob_needs_imaging = 0.2
