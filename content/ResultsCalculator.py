@@ -44,7 +44,7 @@ class Trial_Results_Calculator:
             all_wait_times_df = pd.concat([all_wait_times_df, wait_times_this_run])
 
         # save to csv
-        print(all_wait_times_df.head())
+        #print(all_wait_times_df.head())
         all_wait_times_df.to_csv('all_wait_times.csv')
 
         # delete individual run files
@@ -56,7 +56,7 @@ class Trial_Results_Calculator:
         trial_results_df = pd.read_csv('all_wait_times.csv')
         
         fig = px.scatter(trial_results_df, x='time_entered_pathway',
-                            y='overall_q_time', opacity=0.8, trendline='ols',
+                            y='overall_q_time', opacity=0.6, trendline='ols',
                             trendline_color_override='red',
                             title='Total wait time vs time of referral',
                             labels={'time_entered_pathway': 'Day of referral',
@@ -71,7 +71,7 @@ class Trial_Results_Calculator:
 
         # calculate mean queue numbers
         data = {
-            'name': ['Clinic', 'Imaging', 'Therapy', 'Theatres'],
+            'name': ['Clinic', 'Imaging', 'Hand Therapy', 'Theatres'],
             'Before': [self.fill_clinic_q, self.fill_imaging_q, self.fill_therapy_q, self.fill_theatre_q],
             'After': [self.queue_numbers_df['clinic_q'].mean(),
                         self.queue_numbers_df['imaging_q'].mean(),
@@ -83,9 +83,9 @@ class Trial_Results_Calculator:
         self.overall_q_numbers_df = pd.DataFrame(data)
         self.overall_q_numbers_df.set_index('name', inplace=True)
 
-        print(f'Number in clinic queue before: {self.fill_clinic_q}')
-        print(f'Number in clinic queue after: {self.overall_q_numbers_df["After"][0]}')
-        print(self.overall_q_numbers_df)
+        #print(f'Number in clinic queue before: {self.fill_clinic_q}')
+        #print(f'Number in clinic queue after: {self.overall_q_numbers_df["After"][0]}')
+        #print(self.overall_q_numbers_df)
 
     # plot the average queue numbers
     def plot_queue_numbers(self):
@@ -95,3 +95,8 @@ class Trial_Results_Calculator:
                              'name': 'Stage of pathway',
                              'variable': 'Before or after simulation'})
         return fig
+    
+    # method to calculate queue numbers at end of simulation
+    def readout_total_queue_numbers(self):
+
+        return self.overall_q_numbers_df['After'].sum()

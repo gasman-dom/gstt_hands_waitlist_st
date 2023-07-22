@@ -17,7 +17,7 @@ class g:
     theatre_list_capacity = 6
 
     trauma_list_per_week = 5
-    trauma_extra_patients = 1
+    trauma_extra_patients = 0
     
     #proportion of patients requiring interventions
     prob_needs_imaging = 0.2
@@ -27,10 +27,10 @@ class g:
     sim_duration = 100
     
     #numbers to add to queues before simulation starts
-    fill_clinic_q = 100
-    fill_imaging_q = 50
-    fill_therapy_q = 40
-    fill_theatre_q = 30
+    fill_clinic_q = 600
+    fill_imaging_q = 300
+    fill_therapy_q = 300
+    fill_theatre_q = 600
     
     #number of times to run simulation
     number_of_runs = 5

@@ -51,10 +51,20 @@ class Hand_Surgery_Pathway:
         self.trauma_list_per_week = trauma_list_per_week
         self.trauma_extra_patients = trauma_extra_patients
 
+        # calculate total extra patients added on to trauma lists per week
+        self.weekly_extra_patients = trauma_extra_patients * trauma_list_per_week
+
+        # calculate equivalent extra patients per non trauma list
+        self.extra_patients_adjusted = self.weekly_extra_patients / theatre_list_per_week
+
+        # calculate new theatre list capacity
+        self.adjusted_theatre_capacity = theatre_list_capacity + self.extra_patients_adjusted
+
         self.surg_clinic_duration = 1 / surg_clinic_appts
         self.surg_clinic_interval = 7 / surg_clinic_appts
 
-        self.theatre_case_duration = 1 / theatre_list_capacity
+        # here use adjusted theatre capacity
+        self.theatre_case_duration = 1 / self.adjusted_theatre_capacity
         self.theatre_list_interval = 7 / theatre_list_per_week
 
         self.prob_needs_imaging = prob_needs_imaging

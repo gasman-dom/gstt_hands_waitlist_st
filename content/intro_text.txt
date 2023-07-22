@@ -1,0 +1,7 @@
+Welcome to the Guy's and St Thomas' Hand Surgery pathway interactive simulation!
+
+Choose your parameters below (or accept the defaults), then hit "Start Simulation".
+
+The app will simulate the progress of the waiting list for as many days as you specify.
+
+You can view the source code here: https://github.com/gasman-dom/gstt_hands_waitlist_st

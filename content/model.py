@@ -26,7 +26,12 @@ st.set_page_config(layout='wide')
 st.title('GSTT Hand Surgery Pathway Simulation')
 
 # description text
-st.subheader('An interactive webapp using Simpy and Streamlit.')
+st.markdown('Welcome to the Guy\'s and St Thomas\' Hand Surgery pathway interactive simulation!')
+st.markdown('This simulation models the elective hand surgery pathway, based on the diagram below.')
+st.markdown('By adjusting the parameters, you can see how allocating resources differently will affect the waiting lists and waiting times.')
+st.markdown('In particular, it is possible to model the impact of adding extra elective patients onto the hand trauma lists - use the :blue[blue input boxes] in the bottom right.')
+st.markdown('Press \'Start Simulation\' to run the simulation, and the results will be displayed below.')
+st.markdown('[Source code](https://github.com/gasman-dom/gstt_hands_waitlist_st)')
 
 # image of pathway
 image = Image.open('/home/dom/docs/hsma/gstt_hands_waitlist_st/content/pathway_diagram.jpg')
@@ -55,11 +60,11 @@ with col2:
                                     value = g.fill_clinic_q)
     
 with col3:
-    IMAGING_WAIT = st.number_input('Wait Time for Imaging (days)',
+    IMAGING_WAIT = st.number_input('Time Taken for Imaging (days)',
                                    step = 1,
                                    value = g.imaging_wait)
     
-    PROB_IMAGING = st.slider('Percentage of Patients that Require Imaging',
+    PROB_IMAGING = st.slider('Percentage of Patients that require Imaging',
                                             step = 0.01,
                                             value = g.prob_needs_imaging)
     
@@ -68,11 +73,11 @@ with col3:
                                         value = g.fill_imaging_q)
     
 with col4:
-    THERAPY_WAIT = st.number_input('Wait Time for Hand Therapy (days)',
+    THERAPY_WAIT = st.number_input('Time Taken for Hand Therapy (days)',
                                    step = 1,
                                    value = g.therapy_wait)
     
-    PROB_THERAPY = st.slider('Percentage of Patients that Require Therapy',
+    PROB_THERAPY = st.slider('Percentage of Patients that require Therapy',
                                             step = 0.01,
                                             value = g.prob_needs_therapy)
     
@@ -89,29 +94,29 @@ with col5:
                                             step = 1,
                                             value = g.theatre_list_capacity)
     
-    TRAUMA_LISTS = st.number_input('Trauma Lists Per Week',
-                                   step = 1,
-                                      value = g.trauma_list_per_week)
-    
-    EXTRA_PATIENTS = st.number_input('Extra Patients Per Trauma List',
-                                        step = 1,
-                                        value = g.trauma_extra_patients)
-
     THEATRE_Q = st.number_input('Patients Waiting for Theatre at Start of Simulation',
                                         step = 1,
                                         value = g.fill_theatre_q)
+    
+    TRAUMA_LISTS = st.number_input(':blue[Trauma Lists Per Week]',
+                                   step = 1,
+                                      value = g.trauma_list_per_week)
+    
+    EXTRA_PATIENTS = st.number_input(':blue[Extra Patients Per Trauma List]',
+                                        step = 1,
+                                        value = g.trauma_extra_patients)
 
 NUM_OF_RUNS = st.number_input('Number of Times to Run Simulation',
                                         step = 1,   
                                         value = g.number_of_runs)
-st.text('Repeating the simulation more times will provide more accurate results, but will take longer to run.')
+st.markdown('Repeating the simulation more times will provide more accurate results, but will take longer to run.')
 
 LENGTH_OF_SIM = st.number_input('Length of Time to Simulate (days)',
                                         step = 1,
                                         value = g.sim_duration)
 
-#calculate total in queues
-TOTAL_Q = CLINIC_Q + IMAGING_Q + THERAPY_Q + THEATRE_Q
+#calculate total in queues at start of simulation
+TOTAL_Q_START = CLINIC_Q + IMAGING_Q + THERAPY_Q + THEATRE_Q
 
 # button to run simulation
 if st.button('Start Simulation'):
@@ -158,7 +163,17 @@ if st.button('Start Simulation'):
         demo_trial_results_calculator.concatenate_wait_times()
         demo_trial_results_calculator.calculate_mean_queue_numbers()
 
+        # calculate number of patients in queues at end of simulation
+        TOTAL_Q_END = demo_trial_results_calculator.readout_total_queue_numbers()
+
+        # print results
+        st.header('Results')
+        st.subheader('Numbers on Waiting Lists')
+        st.text(f'At the start of the simulation, the total number of patients on the waiting list was {TOTAL_Q_START}.')
+        st.text(f'{LENGTH_OF_SIM} days later, the total number of patients on the waiting list is predicted to be {round(TOTAL_Q_END)}.')
+
         # plot the results
+        st.subheader('Graphs of Waiting Times and Numbers on Waiting Lists')
         col1, col2 = st.columns(2)
         with col1:
             st.plotly_chart(demo_trial_results_calculator.plot_wait_times())
