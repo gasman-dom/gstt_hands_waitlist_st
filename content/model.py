@@ -28,14 +28,13 @@ st.title('GSTT Hand Surgery Pathway Simulation')
 # description text
 st.markdown('Welcome to the Guy\'s and St Thomas\' Hand Surgery pathway interactive simulation!')
 st.markdown('This simulation models the elective hand surgery pathway, based on the diagram below, using a computer modelling technique called Discrete Event Simulation.')
-st.markdown('It is built in Python, using [Simpy](https://pypi.org/project/simpy/) to model the queueing system, and [Streamlit](https://streamlit.io/) to create the webapp.')
 st.markdown('By adjusting the parameters, you can see how allocating resources differently will affect the waiting lists and waiting times.')
 st.markdown('In particular, it is possible to model the impact of adding extra elective patients onto the hand trauma lists - use the :green[green input boxes] in the bottom right.')
 st.markdown('Press \'Start Simulation\' to run the simulation, and the results will be displayed below.')
 st.markdown('[Source code](https://github.com/gasman-dom/gstt_hands_waitlist_st)')
 
 # image of pathway
-image = Image.open('/home/dom/docs/hsma/gstt_hands_waitlist_st/content/pathway_diagram.jpg')
+image = Image.open('pathway_diagram.jpg')
 st.image(image,use_column_width=True)
 
 # set up columns
@@ -157,6 +156,7 @@ if st.button('Start Simulation'):
         # Once the trial is complete, we'll create an instance of the
         # Trial_Result_Calculator class and run the print_trial_results method
         demo_trial_results_calculator = Trial_Results_Calculator(number_of_runs=NUM_OF_RUNS,
+                                                                 sim_duration=LENGTH_OF_SIM,
                                                                  fill_clinic_q=CLINIC_Q,
                                                                  fill_imaging_q=IMAGING_Q,
                                                                  fill_therapy_q=THERAPY_Q,
@@ -167,11 +167,17 @@ if st.button('Start Simulation'):
         # calculate number of patients in queues at end of simulation
         TOTAL_Q_END = demo_trial_results_calculator.readout_total_queue_numbers()
 
+        # calculate average wait times at start and end of simulation
+        MEAN_WAIT_START = demo_trial_results_calculator.readout_wait_time_start()
+        MEAN_WAIT_END = demo_trial_results_calculator.readout_wait_time_end()
+
         # print results
         st.header('Results')
         st.subheader('Numbers on Waiting Lists')
-        st.text(f'At the start of the simulation, the total number of patients on the waiting list was {TOTAL_Q_START}.')
-        st.text(f'After {LENGTH_OF_SIM} days, the total number of patients on the waiting list is predicted to be {round(TOTAL_Q_END)}.')
+        st.text(f'At the start of the simulation, the total number of patients on the waiting list was {TOTAL_Q_START}, with an average wait time of {round(MEAN_WAIT_START)} days.')
+        st.text(f'After {LENGTH_OF_SIM} days, the total number of patients on the waiting list is predicted to be {round(TOTAL_Q_END)}, with an average wait time of {round(MEAN_WAIT_END)} days.')
+
+        demo_trial_results_calculator.readout_wait_time_end()
 
         # plot the results
         st.subheader('Graphs of Waiting Times and Numbers on Waiting Lists')

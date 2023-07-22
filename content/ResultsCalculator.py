@@ -19,13 +19,15 @@ from HandPatient import Patient
 class Trial_Results_Calculator:
     def __init__(self,
                  number_of_runs = g.number_of_runs,
+                 sim_duration = g.sim_duration,
                  fill_clinic_q = g.fill_clinic_q,
                  fill_imaging_q = g.fill_imaging_q,
                  fill_therapy_q = g.fill_therapy_q,
                  fill_theatre_q = g.fill_theatre_q):
-        self.trial_results_df = pd.DataFrame()
+        #self.trial_results_df = pd.DataFrame()
 
         self.number_of_runs = number_of_runs
+        self.sim_duration = sim_duration
         self.fill_clinic_q = fill_clinic_q
         self.fill_imaging_q = fill_imaging_q
         self.fill_therapy_q = fill_therapy_q
@@ -100,3 +102,22 @@ class Trial_Results_Calculator:
     def readout_total_queue_numbers(self):
 
         return self.overall_q_numbers_df['After'].sum()
+    
+    # method to calculate average wait time at start of simulation
+    def readout_wait_time_start(self):
+
+        #read trial results csv
+        trial_results_df = pd.read_csv('all_wait_times.csv')
+
+        #return average wait time for patients who entered pathway on day 0
+        return trial_results_df[trial_results_df['time_entered_pathway'] < 1]['overall_q_time'].mean()
+    
+    # method to calculate average wait time at end of simulation
+    def readout_wait_time_end(self):
+
+        # read trial results csv
+        trial_results_df = pd.read_csv('all_wait_times.csv')
+
+        # return average wait time for patients who entered pathway on final day of simulation
+        last_day = self.sim_duration - 1
+        return trial_results_df[trial_results_df['time_entered_pathway'] > last_day]['overall_q_time'].mean()
