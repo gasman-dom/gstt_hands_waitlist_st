@@ -320,7 +320,7 @@ class Hand_Surgery_Pathway:
             yield self.env.timeout(1)
             
             #request resource with max priority and hold until next list
-            with self.theatres.request(priority = -1) as req:
+            with self.theatres.request() as req:
                 # Freeze the function until the request can be met (this
                 # ensures that the last theatre case will be completed)
                 yield req
