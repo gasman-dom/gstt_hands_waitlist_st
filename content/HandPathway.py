@@ -83,8 +83,8 @@ class Hand_Surgery_Pathway:
         self.end_of_sim = self.env.event()
 
         #setup resources
-        self.surg_clinic = simpy.Resource(self.env, capacity=1)
-        self.theatres = simpy.Resource(self.env, capacity=1)
+        self.surg_clinic = simpy.PriorityResource(self.env, capacity=1)
+        self.theatres = simpy.PriorityResource(self.env, capacity=1)
 
         self.run_number = run_number
 
@@ -304,7 +304,7 @@ class Hand_Surgery_Pathway:
             yield self.env.timeout(1)
             
             #request clinic with max priority and hold until next clinic
-            with self.surg_clinic.request() as req:
+            with self.surg_clinic.request(priority=-1) as req:
                 # Freeze the function until the request can be met (this
                 # ensures that the last patient in clinic will be seen)
                 yield req
@@ -320,7 +320,7 @@ class Hand_Surgery_Pathway:
             yield self.env.timeout(1)
             
             #request resource with max priority and hold until next list
-            with self.theatres.request() as req:
+            with self.theatres.request(priority=-1) as req:
                 # Freeze the function until the request can be met (this
                 # ensures that the last theatre case will be completed)
                 yield req
