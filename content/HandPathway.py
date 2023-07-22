@@ -298,30 +298,34 @@ class Hand_Surgery_Pathway:
     # method to model interval between clinic appointments
     def clinic_unavail(self):
 
-        #freeze clinic_unavail function for duration of clinic
-        yield self.env.timeout(1)
+        while True:
         
-        #request clinic with max priority and hold until next clinic
-        with self.surg_clinic.request() as req:
-            # Freeze the function until the request can be met (this
-            # ensures that the last patient in clinic will be seen)
-            yield req
+            #freeze clinic_unavail function for duration of clinic
+            yield self.env.timeout(1)
             
-            yield self.env.timeout(self.surg_clinic_interval)
+            #request clinic with max priority and hold until next clinic
+            with self.surg_clinic.request() as req:
+                # Freeze the function until the request can be met (this
+                # ensures that the last patient in clinic will be seen)
+                yield req
+                
+                yield self.env.timeout(self.surg_clinic_interval)
 
     # method to model interval between theatre lists
     def theatres_unavail(self):
+
+        while True:
         
-        #freeze theatres_unavail function for duration of list
-        yield self.env.timeout(1)
-        
-        #request resource with max priority and hold until next list
-        with self.theatres.request() as req:
-            # Freeze the function until the request can be met (this
-            # ensures that the last theatre case will be completed)
-            yield req
+            #freeze theatres_unavail function for duration of list
+            yield self.env.timeout(1)
             
-            yield self.env.timeout(self.theatre_list_interval)
+            #request resource with max priority and hold until next list
+            with self.theatres.request(priority = -1) as req:
+                # Freeze the function until the request can be met (this
+                # ensures that the last theatre case will be completed)
+                yield req
+                
+                yield self.env.timeout(self.theatre_list_interval)
 
     # method to check if simulation should continue
     def monitor(self, env, active_entities, end_point, end_of_sim):
