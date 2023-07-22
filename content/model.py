@@ -27,9 +27,10 @@ st.title('GSTT Hand Surgery Pathway Simulation')
 
 # description text
 st.markdown('Welcome to the Guy\'s and St Thomas\' Hand Surgery pathway interactive simulation!')
-st.markdown('This simulation models the elective hand surgery pathway, based on the diagram below.')
+st.markdown('This simulation models the elective hand surgery pathway, based on the diagram below, using a computer modelling technique called Discrete Event Simulation.')
+st.markdown('It is built in Python, using [Simpy](https://pypi.org/project/simpy/) to model the queueing system, and [Streamlit](https://streamlit.io/) to create the webapp.')
 st.markdown('By adjusting the parameters, you can see how allocating resources differently will affect the waiting lists and waiting times.')
-st.markdown('In particular, it is possible to model the impact of adding extra elective patients onto the hand trauma lists - use the :blue[blue input boxes] in the bottom right.')
+st.markdown('In particular, it is possible to model the impact of adding extra elective patients onto the hand trauma lists - use the :green[green input boxes] in the bottom right.')
 st.markdown('Press \'Start Simulation\' to run the simulation, and the results will be displayed below.')
 st.markdown('[Source code](https://github.com/gasman-dom/gstt_hands_waitlist_st)')
 
@@ -98,11 +99,11 @@ with col5:
                                         step = 1,
                                         value = g.fill_theatre_q)
     
-    TRAUMA_LISTS = st.number_input(':blue[Trauma Lists Per Week]',
+    TRAUMA_LISTS = st.number_input(':green[Trauma Lists Per Week]',
                                    step = 1,
                                       value = g.trauma_list_per_week)
     
-    EXTRA_PATIENTS = st.number_input(':blue[Extra Patients Per Trauma List]',
+    EXTRA_PATIENTS = st.number_input(':green[Extra Patients Per Trauma List]',
                                         step = 1,
                                         value = g.trauma_extra_patients)
 
@@ -170,7 +171,7 @@ if st.button('Start Simulation'):
         st.header('Results')
         st.subheader('Numbers on Waiting Lists')
         st.text(f'At the start of the simulation, the total number of patients on the waiting list was {TOTAL_Q_START}.')
-        st.text(f'{LENGTH_OF_SIM} days later, the total number of patients on the waiting list is predicted to be {round(TOTAL_Q_END)}.')
+        st.text(f'After {LENGTH_OF_SIM} days, the total number of patients on the waiting list is predicted to be {round(TOTAL_Q_END)}.')
 
         # plot the results
         st.subheader('Graphs of Waiting Times and Numbers on Waiting Lists')
