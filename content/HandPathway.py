@@ -61,7 +61,7 @@ class Hand_Surgery_Pathway:
         self.adjusted_theatre_capacity = theatre_list_capacity + self.extra_patients_adjusted
 
         self.surg_clinic_duration = 1 / surg_clinic_appts
-        self.surg_clinic_interval = 7 / surg_clinic_appts
+        self.surg_clinic_interval = 7 / surg_clinic_per_week
 
         # here use adjusted theatre capacity
         self.theatre_case_duration = 1 / self.adjusted_theatre_capacity
