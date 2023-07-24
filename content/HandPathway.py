@@ -308,7 +308,7 @@ class Hand_Surgery_Pathway:
                 # Freeze the function until the request can be met (this
                 # ensures that the last patient in clinic will be seen)
                 yield req
-                
+
                 yield self.env.timeout(self.surg_clinic_interval)
 
     # method to model interval between theatre lists
