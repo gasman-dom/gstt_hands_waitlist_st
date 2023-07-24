@@ -34,8 +34,8 @@ st.markdown('Press \'Start Simulation\' to run the simulation, and the results w
 st.markdown('[Source code](https://github.com/gasman-dom/gstt_hands_waitlist_st)')
 
 # image of pathway
-#image = Image.open('/app/gstt_hands_waitlist_st/content/pathway_diagram.jpg')
-#st.image(image,use_column_width=True)
+image = Image.open('/app/gstt_hands_waitlist_st/content/pathway_diagram.jpg')
+st.image(image,use_column_width=True)
 
 # set up columns
 col1, col2, col3, col4, col5 = st.columns(5)
@@ -60,11 +60,11 @@ with col2:
                                     value = g.fill_clinic_q)
     
 with col3:
-    IMAGING_WAIT = st.number_input('Time Taken for Imaging (days)',
+    IMAGING_WEEKLY_APPTS = st.number_input('Number of Imaging Slots per Week',
                                    step = 1,
-                                   value = g.imaging_wait)
+                                   value = g.imaging_weekly_appts)
     
-    PROB_IMAGING = st.slider('Percentage of Patients that require Imaging',
+    PROB_IMAGING = st.slider('Percentage of Patients requiring Imaging',
                                             step = 0.01,
                                             value = g.prob_needs_imaging)
     
@@ -73,11 +73,11 @@ with col3:
                                         value = g.fill_imaging_q)
     
 with col4:
-    THERAPY_WAIT = st.number_input('Time Taken for Hand Therapy (days)',
+    THERAPY_WEEKLY_APPTS = st.number_input('Number of Hand Therapy Slots per Week',
                                    step = 1,
-                                   value = g.therapy_wait)
+                                   value = g.therapy_weekly_appts)
     
-    PROB_THERAPY = st.slider('Percentage of Patients that require Therapy',
+    PROB_THERAPY = st.slider('Percentage of Patients requiring Hand Therapy',
                                             step = 0.01,
                                             value = g.prob_needs_therapy)
     
@@ -98,7 +98,7 @@ with col5:
                                         step = 1,
                                         value = g.fill_theatre_q)
     
-    TRAUMA_LISTS = st.number_input(':green[Trauma Lists Per Week]',
+    TRAUMA_LISTS = st.number_input(':green[Trauma Lists to add Extra Patients Per Week]',
                                    step = 1,
                                       value = g.trauma_list_per_week)
     
@@ -109,7 +109,7 @@ with col5:
 NUM_OF_RUNS = st.number_input('Number of Times to Run Simulation',
                                         step = 1,   
                                         value = g.number_of_runs)
-st.markdown('Repeating the simulation more times will provide more accurate results, but will take longer to run.')
+st.markdown('Repeating the simulation more times will provide more reliable results, but will take longer to run.')
 
 LENGTH_OF_SIM = st.number_input('Length of Time to Simulate (days)',
                                         step = 1,
@@ -138,10 +138,10 @@ if st.button('Start Simulation'):
                                                       surg_clinic_per_week=CLINICS_PER_WEEK,
                                                       surg_clinic_appts=CLINIC_APPTS,
                                                       fill_clinic_q=CLINIC_Q,
-                                                      imaging_wait=IMAGING_WAIT,
+                                                      imaging_weekly_appts=IMAGING_WEEKLY_APPTS,
                                                       prob_needs_imaging=PROB_IMAGING,
                                                       fill_imaging_q=IMAGING_Q,
-                                                      therapy_wait=THERAPY_WAIT,
+                                                      therapy_weekly_appts=THERAPY_WEEKLY_APPTS,
                                                       prob_needs_therapy=PROB_THERAPY,
                                                       fill_therapy_q=THERAPY_Q,
                                                       theatre_list_per_week=LISTS_PER_WEEK,
@@ -174,8 +174,8 @@ if st.button('Start Simulation'):
         # print results
         st.header('Results')
         st.subheader('Numbers on Waiting Lists')
-        st.text(f'At the start of the simulation, the total number of patients on the waiting list was {TOTAL_Q_START}, with an average wait time of {round(MEAN_WAIT_START)} days.')
-        st.text(f'After {LENGTH_OF_SIM} days, the total number of patients on the waiting list is predicted to be {round(TOTAL_Q_END)}, with an average wait time of {round(MEAN_WAIT_END)} days.')
+        st.text(f'At the start of the simulation, the total number of patients on the waiting list was {TOTAL_Q_START}.')
+        st.text(f'After {LENGTH_OF_SIM} days, the total number of patients on the waiting list is predicted to be {round(TOTAL_Q_END)}.')
 
         demo_trial_results_calculator.readout_wait_time_end()
 

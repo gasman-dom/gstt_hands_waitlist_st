@@ -1,27 +1,31 @@
 # A class to store global default values for the simulation
 
 class g:
-    referrals_per_week = 5
+    referrals_per_week = 10
     referral_interval = 7 / referrals_per_week
     
     #number of clinics per week and capacity
-    surg_clinic_per_week = 1
-    surg_clinic_appts = 8
+    surg_clinic_per_week = 2
+    surg_clinic_appts = 6
 
     #average waiting times for imaging and hand therapy
     imaging_wait = 14
     therapy_wait = 30
 
-    #theatre lists and cases per list
-    theatre_list_per_week = 3
-    theatre_list_capacity = 6
+    #appointments per week for imaging and hand therapy
+    imaging_weekly_appts = 2
+    therapy_weekly_appts = 2
 
-    trauma_list_per_week = 5
+    #theatre lists and cases per list
+    theatre_list_per_week = 2
+    theatre_list_capacity = 5
+
+    trauma_list_per_week = 2
     trauma_extra_patients = 0
     
     #proportion of patients requiring interventions
-    prob_needs_imaging = 0.2
-    prob_needs_therapy = 0.2
+    prob_needs_imaging = 0.25
+    prob_needs_therapy = 0.25
     
     #length of simulation (days)
     sim_duration = 100

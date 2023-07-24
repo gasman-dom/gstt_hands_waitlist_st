@@ -15,8 +15,8 @@ class Hand_Surgery_Pathway:
                  referrals_per_week = g.referrals_per_week,
                  surg_clinic_per_week = g.surg_clinic_per_week,
                  surg_clinic_appts = g.surg_clinic_appts,
-                 therapy_wait = g.therapy_wait,
-                 imaging_wait = g.imaging_wait,
+                 therapy_weekly_appts = g.therapy_weekly_appts,
+                 imaging_weekly_appts = g.imaging_weekly_appts,
                  theatre_list_per_week = g.theatre_list_per_week,
                  theatre_list_capacity = g.theatre_list_capacity,
                  trauma_list_per_week = g.trauma_list_per_week,
@@ -42,8 +42,11 @@ class Hand_Surgery_Pathway:
         self.surg_clinic_per_week = surg_clinic_per_week
         self.surg_clinic_appts = surg_clinic_appts
 
-        self.therapy_wait = therapy_wait
-        self.imaging_wait = imaging_wait
+        self.imaging_weekly_appts = imaging_weekly_appts
+        self.therapy_weekly_appts = therapy_weekly_appts
+
+        self.imaging_interval = 7 / imaging_weekly_appts
+        self.therapy_interval = 7 / therapy_weekly_appts
 
         self.theatre_list_per_week = theatre_list_per_week
         self.theatre_list_capacity = theatre_list_capacity
@@ -84,6 +87,8 @@ class Hand_Surgery_Pathway:
 
         #setup resources
         self.surg_clinic = simpy.PriorityResource(self.env, capacity=1)
+        self.imaging = simpy.Resource(self.env, capacity=1)
+        self.therapy = simpy.Resource(self.env, capacity=1)
         self.theatres = simpy.PriorityResource(self.env, capacity=1)
 
         self.run_number = run_number
@@ -270,15 +275,22 @@ class Hand_Surgery_Pathway:
             if patient.needs_imaging == True:
                 #print(f'Patient {patient.id} is waiting for imaging')
                 self.imaging_q += 1
-                yield self.env.timeout(self.imaging_wait)
-                self.imaging_q -= 1
+
+                # request imaging resource
+                with self.imaging.request() as req:
+                    yield req
+                    self.imaging_q -= 1
+                    yield self.env.timeout(self.imaging_interval)
 
         # if needs therapy, timeout for therapy wait time
         if not patient.already_seen_therapy:
             if patient.needs_therapy == True:
                 self.therapy_q += 1
-                yield self.env.timeout(self.therapy_wait)
-                self.therapy_q -= 1
+
+                with self.therapy.request() as req:
+                    yield req
+                    self.therapy_q -= 1
+                    yield self.env.timeout(self.therapy_interval)
 
         # enter queue for theatres
         # record start of queue time and add to tracker
