@@ -126,6 +126,7 @@ class Hand_Surgery_Pathway:
 
             #create new patient
             pt = Patient(self.patient_counter)
+            pt.from_prefills = True
 
             #decide if needs hand therapy/imaging
             self.determine_imaging(pt)
@@ -145,8 +146,12 @@ class Hand_Surgery_Pathway:
             self.active_entities += 1
 
             # create new patient who needs imaging
-            pt = Patient(self.patient_counter, already_seen_clinic = True,
-                         needs_imaging = True)
+            pt = Patient(self.patient_counter)
+            pt.already_seen_clinic = True
+            pt.needs_imaging = True
+            pt.from_prefills = True
+
+            #print(f'Patient {pt.id} should go direct to imaging queue as already_seen_clinic is {pt.already_seen_clinic}')
             
             # determine if needs therapy
             self.determine_therapy(pt)
@@ -155,6 +160,7 @@ class Hand_Surgery_Pathway:
             # as will skip straight to imaging queue
             # get simpy env to run enter_pathway method with this patient
             self.env.process(self.enter_pathway(pt))
+            #print(f'Patient {pt.id} should go direct to imaging queue as already_seen_clinic is {pt.already_seen_clinic}')
 
             # need to have yield statement so code works - timeout for zero time
             yield self.env.timeout(0)
@@ -167,9 +173,11 @@ class Hand_Surgery_Pathway:
             self.active_entities += 1
 
             # create new patient who needs therapy
-            pt = Patient(self.patient_counter, already_seen_clinic = True,
-                         already_seen_imaging = True,
-                         needs_therapy = True)
+            pt = Patient(self.patient_counter)
+            pt.already_seen_clinic = True
+            pt.already_seen_imaging = True
+            pt.needs_therapy = True
+            pt.from_prefills = True
 
             # no need to determine if needs imaging
             # as will skip straight to therapy queue
@@ -187,9 +195,11 @@ class Hand_Surgery_Pathway:
             self.active_entities += 1
 
             # create new patient
-            pt = Patient(self.patient_counter, already_seen_clinic = True,
-                         already_seen_imaging = True,
-                         already_seen_therapy = True)
+            pt = Patient(self.patient_counter)
+            pt.already_seen_clinic = True
+            pt.already_seen_imaging = True
+            pt.already_seen_therapy = True
+            pt.from_prefills = True
 
             # no need to determine if needs surg/imaging/therapy
             # as will skip straight to theatre queue
@@ -222,6 +232,7 @@ class Hand_Surgery_Pathway:
                 
             #get simpy env to run enter_pathway method with this patient
             self.env.process(self.enter_pathway(pt))
+            #print(f'Patient {pt.id} has been generated and entered the clinic queue')
 
             #randomly sample time to next referral
             sampled_interref_time = random.expovariate(1.0/self.referral_interval)
@@ -236,6 +247,7 @@ class Hand_Surgery_Pathway:
             # record start of queue time and add to tracker
             start_q_clinic = self.env.now
             self.clinic_q += 1
+            #print(f'Patient {patient.id} is waiting for clinic')
 
             # request clinic resource
             with self.surg_clinic.request() as req:
@@ -250,21 +262,23 @@ class Hand_Surgery_Pathway:
 
                 # freeze for clinic appointment duration
                 yield self.env.timeout(self.surg_clinic_duration)
+                #print(f'Patient {patient.id} has left the clinic queue')
 
 
-            # if needs imaging, timeout for imaging wait time
-            if not patient.already_seen_imaging:
-                if patient.needs_imaging == True:
-                    self.imaging_q += 1
-                    yield self.env.timeout(self.imaging_wait)
-                    self.imaging_q -= 1
+        # if needs imaging, timeout for imaging wait time
+        if not patient.already_seen_imaging:
+            if patient.needs_imaging == True:
+                #print(f'Patient {patient.id} is waiting for imaging')
+                self.imaging_q += 1
+                yield self.env.timeout(self.imaging_wait)
+                self.imaging_q -= 1
 
-            # if needs therapy, timeout for therapy wait time
-            if not patient.already_seen_therapy:
-                if patient.needs_therapy == True:
-                    self.therapy_q += 1
-                    yield self.env.timeout(self.therapy_wait)
-                    self.therapy_q -= 1
+        # if needs therapy, timeout for therapy wait time
+        if not patient.already_seen_therapy:
+            if patient.needs_therapy == True:
+                self.therapy_q += 1
+                yield self.env.timeout(self.therapy_wait)
+                self.therapy_q -= 1
 
         # enter queue for theatres
         # record start of queue time and add to tracker
@@ -280,9 +294,10 @@ class Hand_Surgery_Pathway:
             self.theatre_q -= 1
 
             # record theatre queue time and overall queue time
-            patient.theatre_q_time = end_q_theatres - start_q_theatres
-            patient.overall_q_time = end_q_theatres - start_q_clinic
-            patient.time_entered_pathway = start_q_clinic
+            if not patient.from_prefills:
+                patient.theatre_q_time = end_q_theatres - start_q_theatres
+                patient.overall_q_time = end_q_theatres - start_q_clinic
+                patient.time_entered_pathway = start_q_clinic
 
             # freeze for theatre case duration
             yield self.env.timeout(self.theatre_case_duration)
@@ -292,7 +307,7 @@ class Hand_Surgery_Pathway:
                 self.active_entities -= 1
 
         # add patient to queue times dataframe
-        if patient.id > self.total_fill_queues and patient.before_end_sim == True:
+        if not patient.from_prefills and patient.before_end_sim == True:
             self.store_queue_times(patient)
 
     # method to model interval between clinic appointments

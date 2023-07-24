@@ -1,7 +1,7 @@
 # A class to store global default values for the simulation
 
 class g:
-    referrals_per_week = 50
+    referrals_per_week = 5
     referral_interval = 7 / referrals_per_week
     
     #number of clinics per week and capacity

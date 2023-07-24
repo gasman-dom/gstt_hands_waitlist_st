@@ -6,7 +6,7 @@ class Patient:
     def __init__(self, p_id, already_seen_clinic=False,
                  already_seen_imaging=False, already_seen_therapy=False,
                  needs_imaging=False, needs_therapy=False,
-                 before_end_sim=True):
+                 before_end_sim=True, from_prefills=False):
         
         self.id = p_id
         self.needs_imaging = False
@@ -25,5 +25,8 @@ class Patient:
 
         #attribute for before/after end of sim
         self.before_end_sim = True
+
+        #attribute for patients who are pre-filled into queues
+        self.from_prefills = False
 
 
