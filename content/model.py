@@ -23,13 +23,13 @@ from PIL import Image
 st.set_page_config(layout='wide')
 
 # title text
-st.title('GSTT Hand Surgery Pathway Simulation')
+st.title('Elective Surgery Pathway Simulation')
 
 # description text
-st.markdown('Welcome to the Guy\'s and St Thomas\' Hand Surgery pathway interactive simulation!')
-st.markdown('This simulation models the elective hand surgery pathway, based on the diagram below, using a computer modelling technique called Discrete Event Simulation.')
+st.markdown('Welcome to the Elective Surgery pathway interactive simulation!')
+st.markdown('This simulation models a simple elective surgery pathway, based on the diagram below, using a computer modelling technique called Discrete Event Simulation.')
 st.markdown('By adjusting the parameters, you can see how allocating resources differently will affect the waiting lists and waiting times.')
-st.markdown('In particular, it is possible to model the impact of adding extra elective patients onto the hand trauma lists - use the :green[green input boxes] in the bottom right.')
+st.markdown('In particular, it is possible to model the impact of adding extra elective patients onto lists - use the :green[green input boxes] in the bottom right.')
 st.markdown('Press \'Start Simulation\' to run the simulation, and the results will be displayed below.')
 st.markdown('[Source code](https://github.com/gasman-dom/gstt_hands_waitlist_st)')
 
@@ -74,15 +74,15 @@ with col3:
                                         value = g.fill_imaging_q)
     
 with col4:
-    THERAPY_WEEKLY_APPTS = st.number_input('Number of Hand Therapy Slots per Week',
+    THERAPY_WEEKLY_APPTS = st.number_input('Number of Physiotherapy Slots per Week',
                                    step = 1,
                                    value = g.therapy_weekly_appts)
     
-    PROB_THERAPY = st.slider('Percentage of Patients requiring Hand Therapy',
+    PROB_THERAPY = st.slider('Percentage of Patients requiring Physiotherapy',
                                             step = 0.01,
                                             value = g.prob_needs_therapy)
     
-    THERAPY_Q = st.number_input('Patients Waiting for Hand Therapy at Start of Simulation',
+    THERAPY_Q = st.number_input('Patients Waiting for Physiotherapy at Start of Simulation',
                                         step = 1,
                                         value = g.fill_therapy_q)
 
@@ -99,11 +99,11 @@ with col5:
                                         step = 1,
                                         value = g.fill_theatre_q)
     
-    TRAUMA_LISTS = st.number_input(':green[Trauma Lists to add Extra Patients Per Week]',
+    TRAUMA_LISTS = st.number_input(':green[Lists to add Extra Patients Per Week]',
                                    step = 1,
                                       value = g.trauma_list_per_week)
     
-    EXTRA_PATIENTS = st.number_input(':green[Extra Patients Per Trauma List]',
+    EXTRA_PATIENTS = st.number_input(':green[Extra Patients Per List]',
                                         step = 1,
                                         value = g.trauma_extra_patients)
 
