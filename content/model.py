@@ -34,6 +34,15 @@ st.markdown('Press \'Start Simulation\' to run the simulation, and the results w
 st.markdown('[Source code](https://github.com/gasman-dom/gstt_hands_waitlist_st)')
 
 # image of pathway
+
+def file_selector(folder_path='.'):
+    filenames = os.listdir(folder_path)
+    selected_filename = st.selectbox('Select a file', filenames)
+    return os.path.join(folder_path, selected_filename)
+
+filename = file_selector()
+st.write('You selected `%s`' % filename)
+
 image = Image.open('./pathway_diagram.jpg')
 st.image(image,use_column_width=True)
 
