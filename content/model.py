@@ -26,7 +26,7 @@ st.set_page_config(layout='wide')
 st.title('Elective Surgery Pathway Simulation')
 
 # description text
-st.markdown('Welcome to the elective surgery pathway interactive simulation!')
+#st.markdown('Welcome to the elective surgery pathway interactive simulation!')
 st.markdown('This simulation models a simple elective surgery pathway, based on the diagram below, using a computer modelling technique called Discrete Event Simulation.')
 st.markdown('By adjusting the parameters, you can see how allocating resources differently will affect the waiting lists and waiting times.')
 st.markdown('In particular, it is possible to model the impact of adding extra elective patients onto lists - use the :green[green input boxes] in the bottom right.')
