@@ -43,7 +43,7 @@ def file_selector(folder_path='.'):
 filename = file_selector()
 st.write('You selected `%s`' % filename)
 
-image = Image.open('./pathway_diagram.jpg')
+image = Image.open('../pathway_diagram.jpg')
 st.image(image,use_column_width=True)
 
 # set up columns
