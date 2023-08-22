@@ -35,16 +35,8 @@ st.markdown('[Source code](https://github.com/gasman-dom/gstt_hands_waitlist_st)
 
 # image of pathway
 
-def file_selector(folder_path='./content'):
-    filenames = os.listdir(folder_path)
-    selected_filename = st.selectbox('Select a file', filenames)
-    return os.path.join(folder_path, selected_filename)
-
-filename = file_selector()
-st.write('You selected `%s`' % filename)
-
-#image = Image.open('../pathway_diagram.jpg')
-#st.image(image,use_column_width=True)
+image = Image.open('./content/pathway_diagram.jpg')
+st.image(image,use_column_width=True)
 
 # set up columns
 col1, col2, col3, col4, col5 = st.columns(5)
