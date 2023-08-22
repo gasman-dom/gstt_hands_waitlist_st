@@ -34,7 +34,7 @@ st.markdown('Press \'Start Simulation\' to run the simulation, and the results w
 st.markdown('[Source code](https://github.com/gasman-dom/gstt_hands_waitlist_st)')
 
 # image of pathway
-image = Image.open('/app/gstt_hands_waitlist_st/content/pathway_diagram.jpg')
+image = Image.open('/content/pathway_diagram.jpg')
 st.image(image,use_column_width=True)
 
 # set up columns
